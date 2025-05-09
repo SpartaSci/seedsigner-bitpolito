@@ -1,5 +1,3 @@
-# Ignora file compilati Python
-__pycache__/
-*.py[cod]
-
+**/__pycache__/
+**/*.py[cod]
 

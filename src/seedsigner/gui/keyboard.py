@@ -307,7 +307,7 @@ class Keyboard:
             Does NOT call self.renderer.show_image to avoid multiple calls on the same screen.
         """
         # Start with a clear screen
-        self.draw.rectangle(self.rect, outline="#FFF, fill="#FFF")
+        self.draw.rectangle(self.rect, outline="#FFF", fill="#FFF")
 
         for i, row_keys in enumerate(self.keys):
             for j, key in enumerate(row_keys):
