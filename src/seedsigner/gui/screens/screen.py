@@ -367,18 +367,18 @@ class ButtonListScreen(BaseTopNavScreen):
         if self.has_scroll_arrows:
             self.arrow_half_width = 10
             self.cur_scroll_y = self.scroll_y_initial_offset if self.scroll_y_initial_offset is not None else 0
-            self.up_arrow_img = Image.new("RGBA", size=(2 * self.arrow_half_width, 8), color="black")
+            self.up_arrow_img = Image.new("RGBA", size=(2 * self.arrow_half_width, 8), color="#FFFFFF")
             self.up_arrow_img_y = self.top_nav.height - 12
             arrow_draw = ImageDraw.Draw(self.up_arrow_img)
-            arrow_draw.line((self.arrow_half_width, 1, 0, 7), fill=GUIConstants.BUTTON_FONT_COLOR)
-            arrow_draw.line((self.arrow_half_width, 1, 2 * self.arrow_half_width, 7), fill=GUIConstants.BUTTON_FONT_COLOR)
+            arrow_draw.line((self.arrow_half_width, 1, 0, 7), fill="#001CE0")
+            arrow_draw.line((self.arrow_half_width, 1, 2 * self.arrow_half_width, 7), fill="#001CE0")
 
-            self.down_arrow_img = Image.new("RGBA", size=(2 * self.arrow_half_width, 8), color="black")
+            self.down_arrow_img = Image.new("RGBA", size=(2 * self.arrow_half_width, 8), color="#FFFFFF")
             self.down_arrow_img_y = self.canvas_height - 16 + 2
             arrow_draw = ImageDraw.Draw(self.down_arrow_img)
             center_x = int(self.canvas_width / 2)
-            arrow_draw.line((self.arrow_half_width, 7, 0, 1), fill=GUIConstants.BUTTON_FONT_COLOR)
-            arrow_draw.line((self.arrow_half_width, 7, 2 * self.arrow_half_width, 1), fill=GUIConstants.BUTTON_FONT_COLOR)
+            arrow_draw.line((self.arrow_half_width, 7, 0, 1), fill="#001CE0")
+            arrow_draw.line((self.arrow_half_width, 7, 2 * self.arrow_half_width, 1), fill="#001CE0")
 
         cur_selected_button = self.buttons[self.selected_button]
         cur_selected_button.is_selected = True
@@ -436,7 +436,7 @@ class ButtonListScreen(BaseTopNavScreen):
                 int(self.canvas_width / 2) - self.arrow_half_width, self.up_arrow_img_y,
                 int(self.canvas_width / 2) + self.arrow_half_width, self.up_arrow_img_y + self.up_arrow_img.height
             ),
-            fill="black"
+            fill="#FFFFFF"
         )
 
     def _hide_down_arrow(self):
@@ -445,7 +445,7 @@ class ButtonListScreen(BaseTopNavScreen):
                 int(self.canvas_width / 2) - self.arrow_half_width, self.down_arrow_img_y,
                 int(self.canvas_width / 2) + self.arrow_half_width, self.down_arrow_img_y + self.down_arrow_img.height
             ),
-            fill="black"
+            fill="#FFFFFF"
         )
 
 
