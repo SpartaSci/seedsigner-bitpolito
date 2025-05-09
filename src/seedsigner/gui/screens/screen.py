@@ -86,7 +86,7 @@ class BaseScreen(BaseComponent):
         # Clear the whole canvas
         self.image_draw.rectangle(
             (0, 0, self.canvas_width, self.canvas_height),
-            fill=0,
+            fill="#FFFFFF",
         )
 
 

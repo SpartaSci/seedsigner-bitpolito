@@ -27,9 +27,9 @@ class GUIConstants:
     COMPONENT_PADDING = 8
     LIST_ITEM_PADDING = 4
 
-    BACKGROUND_COLOR = "#000000"
-    INACTIVE_COLOR = "#414141"
-    ACCENT_COLOR = "#FF9F0A" # Active Color
+    BACKGROUND_COLOR = "#FFFFFF"
+    INACTIVE_COLOR = "#FFFFFF"
+    ACCENT_COLOR = "#6666FF" # Active Color
     WARNING_COLOR = "#FFD60A"
     DIRE_WARNING_COLOR = "#FF5700"
     ERROR_COLOR = "#FF1B0A"
@@ -76,14 +76,14 @@ class GUIConstants:
     }
     BODY_FONT_MAX_SIZE = TOP_NAV_TITLE_FONT_SIZE["default"]
     BODY_FONT_MIN_SIZE = 15
-    BODY_FONT_COLOR = "#FCFCFC"
+    BODY_FONT_COLOR = "#001CE0"
     BODY_LINE_SPACING = COMPONENT_PADDING
 
     FIXED_WIDTH_FONT_NAME = "Inconsolata-Regular"
     FIXED_WIDTH_EMPHASIS_FONT_NAME = "Inconsolata-SemiBold"
 
     LABEL_FONT_SIZE = BODY_FONT_MIN_SIZE
-    LABEL_FONT_COLOR = "#777777"
+    LABEL_FONT_COLOR = "#001CE0"
 
     BUTTON_FONT_NAME = {
         "default": "OpenSans-SemiBold",
@@ -98,8 +98,8 @@ class GUIConstants:
         # "ar": 16,
         # "ja": 16,
     }
-    BUTTON_FONT_COLOR = "#FCFCFC"
-    BUTTON_BACKGROUND_COLOR = "#2C2C2C"
+    BUTTON_FONT_COLOR = "#FFFFFF"
+    BUTTON_BACKGROUND_COLOR = "#001CE0"
     BUTTON_HEIGHT = 32
     BUTTON_SELECTED_FONT_COLOR = BACKGROUND_COLOR
     
@@ -283,7 +283,7 @@ def calc_text_centering(font: ImageFont,
 
 def load_image(image_name: str) -> Image.Image:
     image_url = os.path.join(pathlib.Path(__file__).parent.resolve(), "..", "resources", "img", image_name)
-    image = Image.open(image_url).convert("RGB")
+    image = Image.open(image_url).convert("RGBA")
     return image
 
 
@@ -1350,7 +1350,7 @@ class Button(BaseComponent):
     icon_name: str = None   # Optional icon to accompany the text
     icon_size: int = GUIConstants.ICON_INLINE_FONT_SIZE
     icon_color: str = GUIConstants.BUTTON_FONT_COLOR
-    selected_icon_color: str = "black"
+    selected_icon_color: str = "#FFFFFF"  # Default 
     icon_y_offset: int = 0
     is_icon_inline: bool = True    # True = render next to text; False = render centered above text
     right_icon_name: str = None    # Optional icon rendered right-justified
@@ -1950,3 +1950,48 @@ def reflow_text_into_pages(text: str,
         pages.append("\n".join(lines[i:i+lines_per_page]))
     
     return pages
+
+
+
+def resize_image_to_fill(img: Image, target_size_x: int, target_size_y: int, sampling_method=Image.Resampling.NEAREST) -> Image:
+    """
+        Resizes the image to fill the target size, cropping the image if necessary.
+    """
+    if img.width == target_size_x and img.height == target_size_y:
+        # No need to resize
+        return img
+
+    # if the image aspect ratio doesn't match the render area, we
+    # need to provide an aspect ratio-aware crop box.
+    render_aspect_ratio = target_size_x / target_size_y
+    source_frame_aspect_ratio = img.width / img.height
+    if render_aspect_ratio > source_frame_aspect_ratio:
+        # Render surface is wider than the source frame; preserve
+        # the width but crop the height
+        cropped_height = (img.width * target_size_y / target_size_x)
+        box = (
+            0,
+            int((img.height - cropped_height)/2),
+            img.width,
+            img.height - int((img.height - cropped_height)/2),
+        )
+
+    elif render_aspect_ratio < source_frame_aspect_ratio:
+        # Render surface is taller than the source frame; preserve
+        # the height but crop the width
+        box = (
+            int((img.width - img.height * target_size_x / target_size_y) / 2),
+            0,
+            int(img.width - (img.width - img.height * target_size_x / target_size_y) / 2),
+            img.height,
+        )
+
+    else:
+        # Render surface and source frame are the same aspect ratio
+        box = None
+
+    return img.resize(
+        (target_size_x, target_size_y),
+        resample=sampling_method,
+        box=box,
+    )

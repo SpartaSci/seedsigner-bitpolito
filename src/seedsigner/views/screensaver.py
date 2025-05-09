@@ -6,7 +6,7 @@ import time
 from dataclasses import dataclass
 from gettext import gettext as _
 
-from seedsigner.gui.components import Fonts, GUIConstants, load_image
+from seedsigner.gui.components import Fonts, GUIConstants, load_image, resize_image_to_fill
 from seedsigner.gui.screens.screen import BaseScreen
 from seedsigner.models.settings import Settings
 from seedsigner.models.settings_definition import SettingsConstants
@@ -20,16 +20,17 @@ logger = logging.getLogger(__name__)
 class LogoScreen(BaseScreen):
     def __init__(self):
         super().__init__()
-        self.logo = load_image("logo_black_240.png")
+        self.logo = load_image("logo_white_240.png")
 
         self.partners = [
-            "hrf",
+            "BitPolito",
         ]
 
         self.partner_logos: dict = {}
         for partner in self.partners:
             logo_url = os.path.join("partners", f"{partner}_logo.png")
-            self.partner_logos[partner] = load_image(logo_url)
+            self.partner_logos[partner] = resize_image_to_fill(img=load_image(logo_url), target_size_x=200, target_size_y=80)
+            
 
 
     def _run(self):
@@ -76,18 +77,25 @@ class OpeningSplashScreen(LogoScreen):
         show_partner_logos = Settings.get_instance().get_value(SettingsConstants.SETTING__PARTNER_LOGOS) == SettingsConstants.OPTION__ENABLED
         if self.force_partner_logos is not None:
             show_partner_logos = self.force_partner_logos
+	
+        logo_offset_x = int((self.canvas_width - self.logo.width)/2)
 
         if show_partner_logos:
             logo_offset_y = -56
         else:
             logo_offset_y = 0
 
-        background = Image.new("RGBA", size=self.logo.size, color="black")
+        background = Image.new("RGBA", size=self.logo.size, color="#FFF")
         if not self.is_screenshot_renderer:
             # Fade in alpha
             for i in range(250, -1, -25):
                 self.logo.putalpha(255 - i)
-                self.renderer.canvas.paste(Image.alpha_composite(background, self.logo), (0, logo_offset_y))
+                #self.renderer.canvas.paste(Image.alpha_composite(background, self.logo), (0, logo_offset_y))
+                self.renderer.canvas.paste(
+                    Image.alpha_composite(background, self.logo),
+                    (logo_offset_x, logo_offset_y)
+                )
+                
                 self.renderer.show_image()
         else:
             # Skip animation for the screenshot generator
@@ -143,9 +151,13 @@ class ScreensaverScreen(LogoScreen):
         super().__init__()
 
         self.buttons = buttons
-
+        self.logo = resize_image_to_fill(load_image("cow.png"), target_size_x=240, target_size_y=240)
+	
+        background = Image.new("RGBA", self.logo.size, "#FFFFFF00")
+        self.logo = Image.alpha_composite(background, self.logo)
+        
         # Paste the logo in a bigger image that is 2x the size of the logo
-        self.image = Image.new("RGB", (2 * self.logo.size[0], 2 * self.logo.size[1]), (0,0,0))
+        self.image = Image.new("RGBA", (2 * self.logo.size[0], 2 * self.logo.size[1]), "#FFFFFF00")
         self.image.paste(self.logo, (int(self.logo.size[0] / 2), int(self.logo.size[1] / 2)))
 
         self.min_coords = (0, 0)
