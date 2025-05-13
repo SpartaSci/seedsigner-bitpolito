@@ -1,3 +1,23 @@
+# BitPolito color
+
+Download here the image with our color, built over the official Seedsigner OS [`seedsigner_os.polito.pi0.img`](https://github.com/SpartaSci/seedsigner-bitpolito/images/seedsigner_os.polito.pi0.img)   
+
+
+An easy setup to work on the code is use the [emulator](https://github.com/enteropositivo/seedsigner-emulator/blob/master/readme.md), follow the instructions and after remove the .git in the emulator folder to avoid conflict. Then add these lines to `.git/info/exclude`
+```
+src/seedsigner/gui/renderer.py
+src/seedsigner/hardware/buttons.py
+src/seedsigner/hardware/camera.py
+src/seedsigner/hardware/pivideostream.py
+src/seedsigner-emulator/
+src/seedsigner/emulator/
+src/seedsigner/resources/icons/emulator_icon.png
+```
+
+This allows to ignore these files locally (they are needed by the emulator) and  easily commit changes without add emualtor files!
+
+
+
 # Build an offline, airgapped Bitcoin signing device for less than $50!
 
 ![Image of SeedSigners in Mini Pill Enclosures](docs/img/Mini_Pill_Main_Photo.jpg)
