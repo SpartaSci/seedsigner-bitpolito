@@ -1,6 +1,6 @@
 # BitPolito color
 
-Download here the image with our color, built over the official Seedsigner OS [`seedsigner_os.polito.pi0.img`](https://github.com/SpartaSci/seedsigner-bitpolito/images/seedsigner_os.polito.pi0.img)   
+Download here the image with our color, built over the official Seedsigner OS [`seedsigner_os.polito.pi0.img`](https://github.com/SpartaSci/seedsigner-bitpolito/releases/download/bitpolito_v1/seedsigner_os.bitpolito.v1.pi0.img)   
 
 
 An easy setup to work on the code is use the [emulator](https://github.com/enteropositivo/seedsigner-emulator/blob/master/readme.md), follow the instructions and after remove the .git in the emulator folder to avoid conflict. Then add these lines to `.git/info/exclude`
